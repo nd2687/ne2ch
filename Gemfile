@@ -18,6 +18,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 
+gem 'twitter'
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'

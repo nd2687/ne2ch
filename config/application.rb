@@ -14,6 +14,8 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+ENV.update YAML.load_file('config/settings.yml')[Rails.env] rescue {}
+
 module Ne2ch
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
