@@ -11,6 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150415083742) do
+
+  create_table "erotic_words", force: :cascade do |t|
+    t.string   "word",       limit: 255, null: false
+    t.string   "first_word", limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
 end
