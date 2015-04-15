@@ -22,7 +22,8 @@ gem 'twitter'
 
 gem 'nokogiri'
 gem 'anemone'
-#gem 'kconv'
+
+gem 'natto'
 
 group :development, :test do
   gem 'byebug'

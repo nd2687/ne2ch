@@ -6,14 +6,14 @@ class EroticWord < ActiveRecord::Base
   end
 
   def check_word_exist
-    if all_word.include?(word)
+    if self.class.all_word.include?(word)
       false
     else
       true
     end
   end
 
-  def all_word
-    EroticWord.all.map(&:word)
+  def self.all_word
+    self.all.map(&:word)
   end
 end

@@ -4,7 +4,7 @@ namespace :twitter do
   desc "tweet hello"
   task :tweet => :environment do
     client = get_twitter_client
-    tweet = "Hello Twitter!"
+    tweet = Article.all.sample.tweet_text
     update(client, tweet)
   end
 end
@@ -22,9 +22,6 @@ end
 def update(client, tweet)
   begin
     tweet = (tweet.length > 140) ? tweet[0..139].to_s : tweet
-    puts tweet
-    puts "#####"
-    puts tweet.chomp
     client.update(tweet.chomp)
   rescue => e
     Rails.logger.error "<<twitter.rake::tweet.update ERROR : #{e.message}>>"
