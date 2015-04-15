@@ -4,7 +4,8 @@ namespace :twitter do
   desc "tweet hello"
   task :tweet => :environment do
     client = get_twitter_client
-    tweet = Article.all.sample.tweet_text
+    recent_articles = Article.where(created_at: (Time.now-60*60)..Time.now)
+    tweet = recent_articles.sample.tweet_text
     update(client, tweet)
   end
 end
