@@ -5,7 +5,7 @@ namespace :twitter do
   task :tweet => :environment do
     client = get_twitter_client
     recent_articles = Article.where(created_at: (Time.now-60*60)..Time.now)
-    5.times do {
+    5.times {
       tweet = recent_articles.sample.tweet_text
       update(client, tweet)
     }
