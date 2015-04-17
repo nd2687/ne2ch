@@ -5,8 +5,10 @@ namespace :twitter do
   task :tweet => :environment do
     client = get_twitter_client
     recent_articles = Article.where(created_at: (Time.now-60*60)..Time.now)
-    tweet = recent_articles.sample.tweet_text
-    update(client, tweet)
+    5.times do {
+      tweet = recent_articles.sample.tweet_text
+      update(client, tweet)
+    }
   end
 
   desc "refollow"
