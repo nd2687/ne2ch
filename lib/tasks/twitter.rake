@@ -61,7 +61,6 @@ def refollow(client)
 end
 
 def get_follower_or_friend(client)
-  # map はやめてtakeにする
   @followers_id = client.followers.map(&:id)
   @friends_id = client.friends.map(&:id)
   and_id = @followers_id && @friends_id
@@ -70,8 +69,10 @@ def get_follower_or_friend(client)
 end
 
 def follow(client)
-  # friend = client.followers.take(5).sample.id
-  # users = client.followers(friend).take(6)
-  # status..
-  # follow..
+  friend = client.followers.take(5).sample.id
+  users = client.followers(friend).take(6)
+  nofriends = users.reject{|user| client.friendship?(client, user) }
+  if nofriends.size > 0
+    client.follow(nofriends)
+  end
 end
