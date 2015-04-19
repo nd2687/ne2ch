@@ -50,9 +50,9 @@ def refollow(client)
     break if @follower_or_friend_id.size == 0
     @follower_or_friend_id.each do |user_id|
       if @followers_id.include?(user_id)
-        client.follow(user_id)
+        client.follow(user_id) unless client.friendships_outgoing.include?(user_id)
       elsif @friends_id.include?(user_id)
-        client.unfollow(user_id)
+        client.unfollow(user_id) unless client.friendships_incoming.include?(user_id)
       else
         break
       end
