@@ -37,8 +37,21 @@ def get_info
           nm.parse(text) do |n|
             text_parse << n.surface
           end
-          check_ban_word = text_parse & EroticWord.all_word
-          unless check_ban_word.length > 0
+          check_ban_word = 0
+          check_ban_word = (text_parse & EroticWord.all_word).size
+          if check_ban_word == 0
+            catch :miss do
+              EroticWord.all_word.each do |word|
+                text_parse.each do |text|
+                  if text.size >= 2 && word.include?(text)
+                    check_ban_word += 1
+                    throw :miss
+                  end
+                end
+              end
+            end
+          end
+          if check_ban_word == 0
             tweet_text = text + " " + url
             Article.create(tweet_text: tweet_text, text: text, url: url)
           end
