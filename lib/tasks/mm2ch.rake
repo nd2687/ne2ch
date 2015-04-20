@@ -41,9 +41,9 @@ def get_info
           check_ban_word = (text_parse & EroticWord.all_word).size
           if check_ban_word == 0
             catch :miss do
-              EroticWord.all_word.each do |word|
-                text_parse.each do |text|
-                  if text.size >= 2 && word.include?(text)
+              text_parse.each do |text|
+                EroticWord.all_word.each do |word|
+                  if text.size >= 2 && text.include?(word)
                     check_ban_word += 1
                     throw :miss
                   end
