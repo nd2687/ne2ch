@@ -11,7 +11,7 @@ class EroticWord < ActiveRecord::Base
   before_save :check_word_exist
 
   def self.all_word
-    self.all.map(&:word)
+    self.pluck(:word)
   end
 
   private
