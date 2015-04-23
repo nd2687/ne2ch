@@ -14,7 +14,7 @@ def get_info
     depth_limit: 0
   }
 
-  puts "Create Article ..."
+  # puts "Create Article ..."
   Anemone.crawl("http://labo.tv/2chnews/", opts) do |anemone|
     anemone.on_every_page do |page|
       page.doc.xpath("/html/body/center[2]//td[@valign='top']/div").each do |div|
