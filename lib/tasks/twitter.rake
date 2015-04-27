@@ -46,7 +46,7 @@ end
 def refollow(client)
   get_follower_or_friend(client)
   i = 1
-  while i <= 10
+  while i <= 20
     break if @follower_or_friend_id.size == 0
     @follower_or_friend_id.each do |user_id|
       if @followers_id.include?(user_id)
@@ -67,7 +67,7 @@ def get_follower_or_friend(client)
   @friends_id = client.friends.map(&:id)
   and_id = @followers_id && @friends_id
   sum_id = @followers_id + @friends_id
-  @follower_or_friend_id = sum_id - and_id
+  @follower_or_friend_id = (sum_id - and_id).shuffle!
 end
 
 def follow(client)
