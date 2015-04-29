@@ -54,6 +54,9 @@ def get_info
           if check_ban_word == 0
             tweet_text = text + " " + url
             Article.create(tweet_text: tweet_text, text: text, url: url)
+          else
+            tweet_text = text + " " + url
+            BanArticle.create(tweet_text: tweet_text, text: text, url: url)
           end
         end
       end
