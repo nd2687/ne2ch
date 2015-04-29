@@ -38,13 +38,15 @@ def get_info
             text_parse << n.surface
           end
           check_ban_word = 0
-          check_ban_word = (text_parse & EroticWord.all_word).size
+          check_ban_word = (ban_word = text_parse & EroticWord.all_word).size
+          ban_word = ban_word.join('') if check_ban_word != 0
           if check_ban_word == 0
             catch :miss do
               text_parse.each do |text|
                 EroticWord.all_word.each do |word|
                   if text.size >= 2 && text.include?(word)
                     check_ban_word += 1
+                    ban_word = word
                     throw :miss
                   end
                 end
@@ -56,7 +58,7 @@ def get_info
             Article.create(tweet_text: tweet_text, text: text, url: url)
           else
             tweet_text = text + " " + url
-            BanArticle.create(tweet_text: tweet_text, text: text, url: url)
+            BanArticle.create(tweet_text: tweet_text, text: text, url: url, ban_word: ban_word)
           end
         end
       end
