@@ -58,7 +58,6 @@ def refollow(client)
       end
       i += 1
       sleep(3)
-      get_follower_or_friend(client)
     end
   end
 end
