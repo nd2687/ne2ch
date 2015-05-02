@@ -35,7 +35,7 @@ def get_info
           text_parse = Array.new
           nm = Natto::MeCab.new
           nm.parse(text) do |n|
-            text_parse << n.surface
+            text_parse << n.surface unless n.surface.empty?
           end
           check_ban_word = 0
           check_ban_word = (ban_word = text_parse & EroticWord.all_word).size
