@@ -5,22 +5,22 @@ namespace :dictionary do
   end
 
   desc "create custom csv"
-  task :custom => :environment do
-    custom
+  task :custom_csv => :environment do
+    custom_csv
   end
 
   desc "create user_dictionary"
-  task :create => :environment do
+  task :create_dic => :environment do
     create_dic
   end
 
   desc "create second_custom csv"
-  task :second_custom => :environment do
+  task :second_custom_csv => :environment do
     second_custom
   end
 
   desc "create add_user_dictionary"
-  task :add_create => :environment do
+  task :create_second_dic => :environment do
     create_second_dic
   end
 end
@@ -32,7 +32,7 @@ def download
   system("curl -L http://dumps.wikimedia.org/jawiki/latest/jawiki-latest-all-titles-in-ns0.gz | gunzip > ./lib/keyword_files/jawiki-latest-all-titles-in-ns0")
 end
 
-def custom
+def custom_csv
   require 'csv'
 
   original_data = {
