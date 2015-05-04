@@ -5,10 +5,15 @@ namespace :twitter do
   task :tweet => :environment do
     client = get_twitter_client
     recent_articles = Article.where(created_at: (Time.now-60*60)..Time.now)
-    5.times {
-      tweet = recent_articles.sample.tweet_text
+    i = 0
+    while i < 5 do
+      article = recent_articles.sample
+      next if article.tweeted?
+      tweet = article.tweet_text
+      article.update(tweeted: true)
       update(client, tweet)
-    }
+      i += 1
+    end
   end
 
   desc "refollow"
