@@ -62,16 +62,16 @@ def refollow(client)
         break
       end
       i += 1
-      sleep(3)
+      sleep 60
     end
   end
 end
 
 def get_follower_or_friend(client)
   @followers_id = client.followers.map(&:id)
-  sleep(3)
+  sleep 60
   @friends_id = client.friends.map(&:id)
-  sleep(3)
+  sleep 60
   and_id = @followers_id && @friends_id
   sum_id = @followers_id + @friends_id
   @follower_or_friend_id = (sum_id - and_id).shuffle!
