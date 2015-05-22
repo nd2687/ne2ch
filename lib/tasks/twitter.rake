@@ -51,27 +51,26 @@ end
 def refollow(client)
   get_follower_or_friend(client)
   i = 1
-  while i <= 20
-    break if @follower_or_friend_id.size == 0
-    @follower_or_friend_id.each do |user_id|
-      if @followers_id.include?(user_id)
-        client.follow(user_id) unless client.friendships_outgoing.include?(user_id)
-      elsif @friends_id.include?(user_id)
-        client.unfollow(user_id) unless client.friendships_incoming.include?(user_id)
-      else
-        break
+  if @follower_or_friend_id.size != 0
+    while i <= @follower_or_friend_id.size
+      @follower_or_friend_id.each do |user_id|
+        if @followers_id.include?(user_id)
+          client.follow(user_id) unless client.friendships_outgoing.include?(user_id)
+        # elsif @friends_id.include?(user_id)
+        #   client.unfollow(user_id) unless client.friendships_incoming.include?(user_id)
+        else
+          break
+        end
+        i += 1
+        sleep 60
       end
-      i += 1
-      sleep 60
     end
   end
 end
 
 def get_follower_or_friend(client)
   @followers_id = client.followers.map(&:id)
-  sleep 60
   @friends_id = client.friends.map(&:id)
-  sleep 60
   and_id = @followers_id && @friends_id
   sum_id = @followers_id + @friends_id
   @follower_or_friend_id = (sum_id - and_id).shuffle!
