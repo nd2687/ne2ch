@@ -14,7 +14,3 @@ end
 every :day do
   rake "twitter:follow"
 end
-
-every 3.hours do
-  rake "twitter:refollow"
-end

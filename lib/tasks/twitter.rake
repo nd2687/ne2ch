@@ -16,12 +16,6 @@ namespace :twitter do
     end
   end
 
-  desc "refollow"
-  task :refollow => :environment do
-    client = get_twitter_client
-    refollow(client)
-  end
-
   desc "follow"
   task :follow => :environment do
     client = get_twitter_client
@@ -48,39 +42,10 @@ def update(client, tweet)
   end
 end
 
-def refollow(client)
-  get_follower_or_friend(client)
-  i = 1
-  if @follower_or_friend_id.size != 0
-    while i <= @follower_or_friend_id.size
-      @follower_or_friend_id.each do |user_id|
-        if @followers_id.include?(user_id)
-          client.follow(user_id) unless client.friendships_outgoing.include?(user_id)
-        # elsif @friends_id.include?(user_id)
-        #   client.unfollow(user_id) unless client.friendships_incoming.include?(user_id)
-        else
-          break
-        end
-        i += 1
-        sleep 60
-      end
-    end
-  end
-end
-
-def get_follower_or_friend(client)
-  @followers_id = client.followers.map(&:id)
-  @friends_id = client.friends.map(&:id)
-  and_id = @followers_id && @friends_id
-  sum_id = @followers_id + @friends_id
-  @follower_or_friend_id = (sum_id - and_id).shuffle!
-end
-
 def follow(client)
-  friend = client.followers.take(5).sample.id
-  users = client.followers(friend).take(6)
-  nofriends = users.reject{|user| client.friendship?(client, user) }
-  if nofriends.size > 0
-    client.follow(nofriends)
+  followers = []
+  client.follower_ids.each_slice(100) do |ids|
+    followers.concat client.users(ids)
   end
+  client.follow(followers)
 end
