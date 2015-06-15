@@ -3,7 +3,7 @@ set :environment, :production
 
 env :PATH, ENV['PATH']
 
-every 14.minute do
+every 28.minute do
   rake "twitter:tweet"
 end
 
