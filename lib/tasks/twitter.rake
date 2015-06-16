@@ -65,7 +65,7 @@ def unfollow(client)
   friends = []
   begin
     friends =
-      client.friend_ids.select{|friend_id| client.follower_ids.include?(friend_id) }
+      client.friend_ids.select{|friend_id| !client.follower_ids.include?(friend_id) }
     client.unfollow(friends)
   rescue Twitter::Error::TooManyRequests => error
     sleep(15*60)
