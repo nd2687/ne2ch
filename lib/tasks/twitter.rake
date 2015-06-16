@@ -21,6 +21,12 @@ namespace :twitter do
     client = get_twitter_client
     follow(client)
   end
+
+  desc "unfollow"
+  task :unfollow => :environment do
+    client = get_twitter_client
+    unfollow(client)
+  end
 end
 
 def get_twitter_client
@@ -44,8 +50,25 @@ end
 
 def follow(client)
   followers = []
-  client.follower_ids.each_slice(100) do |ids|
-    followers.concat client.users(ids)
+  begin
+    client.follower_ids.each_slice(100) do |ids|
+      followers.concat client.users(ids)
+    end
+    client.follow(followers)
+  rescue Twitter::Error::TooManyRequests => error
+    sleep(15*60)
+    retry
   end
-  client.follow(followers)
+end
+
+def unfollow(client)
+  friends = []
+  begin
+    friends =
+      client.friend_ids.select{|friend_id| client.follower_ids.include?(friend_id) }
+    client.unfollow(friends)
+  rescue Twitter::Error::TooManyRequests => error
+    sleep(15*60)
+    retry
+  end
 end

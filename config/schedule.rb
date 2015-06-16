@@ -14,3 +14,7 @@ end
 every :day do
   rake "twitter:follow"
 end
+
+every 2.day do
+  rake "twitter:unfollow"
+end
