@@ -9,6 +9,7 @@ end
 
 every :hour do
   rake "mm2ch:create"
+  rake "twitter:searching"
 end
 
 every :day do

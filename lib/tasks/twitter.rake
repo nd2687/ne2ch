@@ -3,7 +3,6 @@ require 'twitter'
 namespace :twitter do
   desc "tweet"
   task :tweet => :environment do
-    client = get_twitter_client
     recent_articles = Article.where(created_at: (Time.now-60*60)..Time.now)
     i = 0
     while i < 5 do
@@ -11,21 +10,24 @@ namespace :twitter do
       next if article.tweeted?
       tweet = article.tweet_text
       article.update(tweeted: true)
-      update(client, tweet)
+      update(get_twitter_client, tweet)
       i += 1
     end
   end
 
   desc "follow"
   task :follow => :environment do
-    client = get_twitter_client
-    follow(client)
+    follow(get_twitter_client)
   end
 
   desc "unfollow"
   task :unfollow => :environment do
-    client = get_twitter_client
-    unfollow(client)
+    unfollow(get_twitter_client)
+  end
+
+  desc "searching"
+  task :searching => :environment do
+    searching(get_twitter_client)
   end
 end
 
@@ -70,5 +72,19 @@ def unfollow(client)
   rescue Twitter::Error::TooManyRequests => error
     sleep(15*60)
     retry
+  end
+end
+
+def searching(client)
+  keywords = ["バイト", "相互", "学校"]
+  keywords.each do |keyword|
+    client.search(keyword).take(5).each do |tweet|
+      begin
+        client.follow(tweet.user.id)
+      rescue Twitter::Error::TooManyRequests => error
+        sleep(15*60)
+        retry
+      end
+    end
   end
 end
