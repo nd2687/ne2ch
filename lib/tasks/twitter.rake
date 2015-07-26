@@ -78,13 +78,12 @@ end
 def searching(client)
   keywords = ["バイト", "相互", "学校"]
   keywords.each do |keyword|
-    client.search(keyword).take(5).each do |tweet|
-      begin
-        client.follow(tweet.user.id)
-      rescue Twitter::Error::TooManyRequests => error
-        sleep(15*60)
-        retry
-      end
+    user_ids = client.search(keyword).take(5).map{|tweet| tweet.user.id }
+    begin
+      client.follow(user_ids)
+    rescue Twitter::Error::TooManyRequests => error
+      sleep(15*60)
+      retry
     end
   end
 end
