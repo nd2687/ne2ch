@@ -10,12 +10,9 @@ end
 every :hour do
   rake "mm2ch:create"
   rake "twitter:searching"
+  rake "twitter:unfollow"
 end
 
 every :day do
   rake "twitter:follow"
-end
-
-every 2.day do
-  rake "twitter:unfollow"
 end
