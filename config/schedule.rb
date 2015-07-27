@@ -10,6 +10,9 @@ end
 every :hour do
   rake "mm2ch:create"
   rake "twitter:searching"
+end
+
+every 3.hour do
   rake "twitter:unfollow"
 end
 

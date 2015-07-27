@@ -52,6 +52,7 @@ end
 
 def follow(client)
   followers = []
+  cnt_retry = 0
   begin
     client.follower_ids.each_slice(100) do |ids|
       followers.concat client.users(ids)
@@ -59,19 +60,22 @@ def follow(client)
     client.follow(followers)
   rescue Twitter::Error::TooManyRequests => error
     sleep(15*60)
-    retry
+    cnt_retry += 1
+    retry if cnt_retry < 2
   end
 end
 
 def unfollow(client)
   friends = []
+  cnt_retry = 0
   begin
     friends =
       client.friend_ids.select{|friend_id| !client.follower_ids.include?(friend_id) }
     client.unfollow(friends)
   rescue Twitter::Error::TooManyRequests => error
     sleep(15*60)
-    retry
+    cnt_retry += 1
+    retry if cnt_retry < 2
   end
 end
 
@@ -79,11 +83,13 @@ def searching(client)
   keywords = ["バイト", "相互", "学校"]
   keywords.each do |keyword|
     user_ids = client.search(keyword).take(5).map{|tweet| tweet.user.id }
+    cnt_retry = 0
     begin
       client.follow(user_ids)
     rescue Twitter::Error::TooManyRequests => error
       sleep(15*60)
-      retry
+      cnt_retry += 1
+      retry if cnt_retry < 2
     end
   end
 end
